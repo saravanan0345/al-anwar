@@ -1,0 +1,2 @@
+CREATE POLICY "Anyone can view project images" ON storage.objects FOR SELECT TO anon, authenticated USING (bucket_id = 'project-photos');
+CREATE POLICY "Anyone can view approved review images" ON storage.objects FOR SELECT TO anon, authenticated USING (bucket_id = 'review-photos' AND EXISTS (SELECT 1 FROM public.reviews WHERE reviews.photo_path = storage.objects.name AND reviews.status = 'approved'));
