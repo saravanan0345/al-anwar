@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowRight, Building2, Droplets, MessageCircle, Phone, Ruler, ShieldCheck } from "lucide-react";
+import { ArrowRight, Building2, Droplets, Instagram, MessageCircle, Phone, Ruler, ShieldCheck } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 const heroAsset = { url: "/assets/hero-interior.jpg" };
 const constructionAsset = { url: "/assets/construction.jpg" };
@@ -12,18 +12,54 @@ import { EnquiryForm } from "@/components/enquiry-form";
 import { ReviewForm } from "@/components/review-form";
 import { SiteHeader } from "@/components/site-header";
 import { supabase } from "@/integrations/supabase/client";
-import { PHONE_DISPLAY, PHONE_LINK, serviceMessages, whatsappLink } from "@/lib/site";
+import { BUSINESS_NAME, BUSINESS_URL, CONTACT_ADDRESS, CONTACT_ADDRESS_LINES, MAPS_DIRECTIONS_URL, PHONE_DISPLAY, PHONE_LINK, serviceMessages, whatsappLink } from "@/lib/site";
+
+const instagramUrl = "https://www.instagram.com/anwar_20191990?stkn=YXN6YnJrNHNiYWtw";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "AL-ANWAR Build & Design | Interiors, Construction & RO" },
-      { name: "description", content: "AL-ANWAR Build & Design provides interior design, building construction and RO water purifier installation with customer-focused service." },
-      { property: "og:title", content: "AL-ANWAR Build & Design | Interiors, Construction & RO" },
-      { property: "og:description", content: "Stylish interiors, reliable construction and clean-water solutions from one professional team." },
-      { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
+      { title: "ALANWAR Build & Design | Interior Design, Construction & RO Water" },
+      { name: "description", content: "ALANWAR Build & Design offers interior design, construction and building services, plus RO water purifier and Aqua water installation in Noombal, Thiruverkadu, Chennai." },
+      { name: "keywords", content: "interior design Noombal, construction Thiruverkadu, building services Chennai, RO water purifier installation, Aqua water installation" },
+      { name: "author", content: BUSINESS_NAME },
+      { property: "og:title", content: "ALANWAR Build & Design | Interior Design, Construction & RO Water" },
+      { property: "og:description", content: "Interior design, construction and building, and RO water purifier and Aqua water installation in Noombal, Thiruverkadu, Chennai." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: BUSINESS_URL },
+      { property: "og:site_name", content: BUSINESS_NAME },
+      { property: "og:image", content: `${BUSINESS_URL}${logoAsset.url}` },
+      { property: "og:image:alt", content: "ALANWAR Build & Design logo" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
-    scripts: [{ type: "application/ld+json", children: JSON.stringify({ "@context":"https://schema.org", "@type":"HomeAndConstructionBusiness", name:"AL-ANWAR Build & Design", telephone:"+919940566624", image:logoAsset.url, founder:{"@type":"Person",name:"Anwar Basha A"}, makesOffer:["Interior Design","Construction & Building","RO Water Purification"].map(name=>({"@type":"Offer",itemOffered:{"@type":"Service",name}})) }) }],
+    links: [{ rel: "canonical", href: BUSINESS_URL }],
+    scripts: [{ type: "application/ld+json", children: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "HomeAndConstructionBusiness",
+      "@id": `${BUSINESS_URL}#business`,
+      name: BUSINESS_NAME,
+      url: BUSINESS_URL,
+      telephone: "+919940566624",
+      image: `${BUSINESS_URL}${logoAsset.url}`,
+      founder: { "@type": "Person", name: "Anwar Basha A" },
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: `${CONTACT_ADDRESS.streetAddress}, ${CONTACT_ADDRESS.locality}`,
+        addressLocality: CONTACT_ADDRESS.area,
+        addressRegion: CONTACT_ADDRESS.region,
+        postalCode: CONTACT_ADDRESS.postalCode,
+        addressCountry: "IN",
+      },
+      areaServed: ["Noombal", "Thiruverkadu", "Chennai", "Tamil Nadu"],
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: "ALANWAR Build & Design services",
+        itemListElement: ["Interior Design", "Construction & Building", "RO Water Purifier Installation", "Aqua Water Installation"].map(name => ({
+          "@type": "Offer",
+          itemOffered: { "@type": "Service", name, areaServed: "Chennai, Tamil Nadu" },
+        })),
+      },
+    }) }],
   }),
   component: Home,
 });
@@ -46,7 +82,7 @@ function Home() {
 
     <DynamicContent/>
 
-    <section id="contact" className="bg-navy py-24 text-primary-foreground sm:py-32"><div className="section-shell grid gap-12 lg:grid-cols-[.8fr_1.2fr] lg:items-start"><div><p className="eyebrow">Start a conversation</p><h2 className="mt-4 text-4xl sm:text-6xl">Let’s Build Something Beautiful Together.</h2><p className="mt-6 max-w-lg leading-7 text-primary-foreground/70">Tell us about your project and our team will get in touch with you.</p><div className="mt-8 flex flex-wrap gap-3"><Button asChild variant="glass"><a href={PHONE_LINK}><Phone/>Call {PHONE_DISPLAY}</a></Button><Button asChild variant="whatsapp"><a href={whatsappLink(serviceMessages.interior)} target="_blank" rel="noreferrer"><MessageCircle/>Interior / Construction</a></Button><Button asChild variant="whatsapp"><a href={whatsappLink(serviceMessages.ro)} target="_blank" rel="noreferrer"><Droplets/>RO WhatsApp</a></Button></div></div><EnquiryForm/></div></section>
+    <section id="contact" className="bg-navy py-24 text-primary-foreground sm:py-32"><div className="section-shell grid gap-12 lg:grid-cols-[.8fr_1.2fr] lg:items-start"><div><p className="eyebrow">Start a conversation</p><h2 className="mt-4 text-4xl sm:text-6xl">Let’s Build Something Beautiful Together.</h2><p className="mt-6 max-w-lg leading-7 text-primary-foreground/70">Tell us about your project and our team will get in touch with you for interior design, construction, or RO water purifier and Aqua water installation in Noombal, Thiruverkadu, Chennai.</p><address className="mt-8 border-l-2 border-primary pl-4 text-sm not-italic leading-7 text-primary-foreground/80">{CONTACT_ADDRESS_LINES.map(line => <span key={line} className="block">{line}</span>)}</address><div className="mt-8 flex flex-wrap gap-3"><Button asChild variant="glass"><a href={PHONE_LINK}><Phone/>Call {PHONE_DISPLAY}</a></Button><Button asChild variant="glass"><a href={MAPS_DIRECTIONS_URL} target="_blank" rel="noreferrer">Get Directions</a></Button><Button asChild variant="glass"><a href={instagramUrl} target="_blank" rel="noreferrer"><Instagram/>Instagram</a></Button><Button asChild variant="whatsapp"><a href={whatsappLink(serviceMessages.interior)} target="_blank" rel="noreferrer"><MessageCircle/>Interior / Construction</a></Button><Button asChild variant="whatsapp"><a href={whatsappLink(serviceMessages.ro)} target="_blank" rel="noreferrer"><Droplets/>RO WhatsApp</a></Button></div></div><EnquiryForm/></div></section>
   </main><Footer/></>;
 }
 
@@ -58,4 +94,4 @@ function DynamicContent(){
   return <><section id="projects" className="py-24 sm:py-32"><div className="section-shell"><p className="eyebrow">Selected projects</p><div className="mb-12 flex items-end justify-between gap-4"><h2 className="mt-4 text-4xl sm:text-6xl">Our Work</h2><p className="hidden max-w-sm text-right text-sm text-muted-foreground sm:block">A living portfolio, updated as new work is completed.</p></div><ContentCarousel type="projects" items={projects}/></div></section><section id="reviews" className="bg-muted py-24 sm:py-32"><div className="section-shell"><div className="mb-12 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4"><div><p className="eyebrow">Client voices</p><h2 className="mt-4 text-4xl sm:text-6xl">Reviews</h2></div><ReviewForm/></div><ContentCarousel type="reviews" items={reviews}/></div></section></>
 }
 
-function Footer(){return <footer className="bg-ink py-16 text-primary-foreground"><div className="section-shell grid gap-10 md:grid-cols-3"><div><p className="font-display text-3xl">AL-ANWAR</p><p className="mt-1 text-[10px] tracking-[.3em] text-primary-foreground/55">BUILD & DESIGN</p><a href={PHONE_LINK} className="mt-6 block text-sm text-bronze-soft">{PHONE_DISPLAY}</a></div><div><p className="text-xs font-semibold uppercase tracking-[.18em]">Services</p><ul className="mt-5 space-y-3 text-sm text-primary-foreground/60"><li>Interior Design</li><li>Construction & Building</li><li>RO Water Purification</li></ul></div><div><p className="text-xs font-semibold uppercase tracking-[.18em]">Quick links</p><div className="mt-5 grid grid-cols-2 gap-3 text-sm text-primary-foreground/60">{['Home','About','Services','Projects','Reviews','Contact'].map(x=><a key={x} href={`#${x.toLowerCase()}`}>{x}</a>)}</div></div></div><div className="section-shell mt-12 flex items-center justify-between border-t border-primary-foreground/10 pt-6 text-[11px] text-primary-foreground/40"><span>© AL-ANWAR Build & Design. All rights reserved.</span></div></footer>}
+function Footer(){return <footer className="bg-ink py-16 text-primary-foreground"><div className="section-shell grid gap-10 md:grid-cols-3"><div><p className="font-display text-3xl">AL-ANWAR</p><p className="mt-1 text-[10px] tracking-[.3em] text-primary-foreground/55">BUILD & DESIGN</p><a href={PHONE_LINK} className="mt-6 block text-sm text-bronze-soft">{PHONE_DISPLAY}</a><address className="mt-5 text-sm not-italic leading-6 text-primary-foreground/60">{CONTACT_ADDRESS_LINES.map(line => <span key={line} className="block">{line}</span>)}</address><div className="mt-4 flex flex-wrap gap-4 text-sm"><a href={MAPS_DIRECTIONS_URL} target="_blank" rel="noreferrer" className="text-bronze-soft">Get directions</a><a href={instagramUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-bronze-soft"><Instagram className="h-4 w-4"/>Instagram</a></div></div><div><h3 className="text-xs font-semibold uppercase tracking-[.18em]">Services</h3><ul className="mt-5 space-y-3 text-sm text-primary-foreground/60"><li>Interior Design</li><li>Construction & Building</li><li>RO Water Purifier &amp; Aqua Water Installation</li></ul></div><div><h3 className="text-xs font-semibold uppercase tracking-[.18em]">Quick links</h3><div className="mt-5 grid grid-cols-2 gap-3 text-sm text-primary-foreground/60">{['Home','About','Services','Projects','Reviews','Contact'].map(x=><a key={x} href={`#${x.toLowerCase()}`}>{x}</a>)}</div></div></div><div className="section-shell mt-12 flex items-center justify-between border-t border-primary-foreground/10 pt-6 text-[11px] text-primary-foreground/40"><span>© ALANWAR Build & Design. All rights reserved.</span></div></footer>}
