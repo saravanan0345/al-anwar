@@ -20,7 +20,7 @@ import { ContentCarousel, type ProjectItem, type ReviewItem } from "@/components
 import { EnquiryForm } from "@/components/enquiry-form";
 import { ReviewForm } from "@/components/review-form";
 import { SiteHeader } from "@/components/site-header";
-import { supabase } from "@/integrations/supabase/client";
+import { getPublicContent } from "@/lib/public-content";
 import {
   BUSINESS_NAME,
   BUSINESS_URL,
@@ -443,33 +443,7 @@ function DynamicContent() {
     let active = true;
     async function load() {
       try {
-        const [{ data: p, error: projectError }, { data: r, error: reviewError }] =
-          await Promise.all([
-            supabase.from("projects").select("*").order("sort_order").order("created_at"),
-            supabase
-              .from("reviews")
-              .select("*")
-              .eq("status", "approved")
-              .order("created_at", { ascending: false }),
-          ]);
-        if (projectError || reviewError) throw projectError ?? reviewError;
-        const pp = await Promise.all(
-          (p ?? []).map(async (x) => ({
-            ...x,
-            image_url:
-              (await supabase.storage.from("project-photos").createSignedUrl(x.image_path, 3600))
-                .data?.signedUrl ?? "",
-          })),
-        );
-        const rr = await Promise.all(
-          (r ?? []).map(async (x) => ({
-            ...x,
-            photo_url: x.photo_path
-              ? ((await supabase.storage.from("review-photos").createSignedUrl(x.photo_path, 3600))
-                  .data?.signedUrl ?? null)
-              : null,
-          })),
-        );
+        const { projects: pp, reviews: rr } = await getPublicContent();
         if (active) {
           setProjects(pp.filter((x) => x.image_url));
           setReviews(rr);
